@@ -1,6 +1,6 @@
 FROM debian:stable
 
-RUN apt-get update && apt-get install -y php-fpm php-mysql wget unzip && \
+RUN apt-get update && apt-get install -y php8.0-fpm php8.0-mysql wget unzip && \
     wget https://wordpress.org/latest.zip && \
     unzip latest.zip && \
     mkdir -p /var/www/html && \
@@ -20,4 +20,4 @@ RUN chown www-data:www-data /var/www/html/wp-config.php
 EXPOSE 9000
 
 # php-fpmを起動してFastCGIリクエストを処理
-CMD ["php-fpm"]
+CMD ["php8.0-fpm"]
