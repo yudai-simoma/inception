@@ -1,0 +1,106 @@
+# version: '3.8'
+
+services:
+  nginx:
+    # nginxのDockerfileがあるディレクトリを指定してビルド
+    build: ./requirements/nginx
+    ports:
+      - "443:443"
+    volumes:
+      - ./requirements/nginx/conf:/etc/nginx/conf.d
+      - wordpress_data:/var/www/html
+    networks:
+      - wordpress_network
+    environment:
+      - VIRTUAL_HOST=${DOMAIN_NAME}
+    # クラッシュ時に再起動
+    restart: always
+
+  wordpress:
+    build: ./requirements/wordpress
+    volumes:
+      - wordpress_data:/var/www/html
+    environment:
+      - WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST}
+      - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}
+      - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
+      - WORDPRESS_DB_PASSWORD=${WORDPRESS_DB_PASSWORD}
+    networks:
+      - wordpress_network
+    depends_on:
+      # WordPressがMariaDBの起動を待つ設定
+      - mariadb
+    restart: always
+
+  mariadb:
+    build: ./requirements/mariadb
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    networks:
+      - wordpress_network
+    restart: always
+
+volumes:
+  wordpress_data:
+    driver: local
+    driver_opts:
+      # 特別なファイルシステムを使用しない
+      type: none
+      # バインドマウントを使用
+      o: bind
+      # ホスト上のマウントポイント
+      device: /home/${USER}/data/wordpress
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/${USER}/data/mariadb
+
+networks:
+  wordpress_network:
+
+
+# services: 各サービス（コンテナ）の設定。
+# image: 使用するDockerイメージを指定。
+# build: Dockerfileからイメージをビルドする設定。
+# ports: ホストとコンテナ間のポートマッピングを設定。
+# volumes: 永続的なデータの保存場所を指定。
+# environment: 環境変数を渡す設定。
+# depends_on: サービスの起動順序を制御。
+# networks: サービス間の通信ネットワーク設定。
+# restart: コンテナの再起動ポリシーを設定。
+# expose: コンテナ間で公開するポートを指定。
+# command: コンテナ起動時に実行するコマンドを指定。
+
+# entrypoint: コンテナのエントリーポイントを上書き。
+# healthcheck: コンテナの健康状態チェックを設定。
+# deploy: Swarmモードでのデプロイメント設定。
+# configs: 設定ファイルをサービスにマウント。
+# secrets: 機密情報をサービスに安全に提供。
+# labels: メタデータをサービスに付与。
+# logging: ログ出力の設定。
+# volumes_from: 他のサービスのボリュームをマウント。
+# cap_add, cap_drop: Linuxケーパビリティの追加/削除。
+# devices: ホストデバイスをコンテナにマッピング。
+# extends: 他のComposeファイルから設定を継承。
+# external_links: 外部コンテナとのリンクを設定。
+# extra_hosts: コンテナのhostsファイルにエントリを追加。
+# pid: プロセスの名前空間を設定。
+# security_opt: セキュリティオプションを設定。
+# stop_signal: コンテナ停止時に送信するシグナルを指定。
+# sysctls: カーネルパラメータを設定。
+# tmpfs: テンポラリファイルシステムをマウント。
+# ulimits: Ulimitの設定。
+# userns_mode: ユーザー名前空間の設定。
+# dns: カスタムDNSサーバーを指定。
+# dns_search: DNSサーチドメインを指定。
+# env_file: 環境変数ファイルを指定。
+# user: コンテナ内で使用するユーザーを指定。
+# working_dir: コンテナ内の作業ディレクトリを指定。
+# domainname, hostname, ipc, mac_address, privileged, read_only, shm_size, stdin_open, tty: その他の各種コンテナ設定。

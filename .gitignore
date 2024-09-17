@@ -1,0 +1,4 @@
+.env
+nginx.crt
+nginx.key
+wp-config.php
