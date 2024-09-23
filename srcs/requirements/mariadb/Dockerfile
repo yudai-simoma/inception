@@ -3,18 +3,13 @@ FROM debian:stable
 # gosuは、特定のユーザーやグループとしてコマンドを実行する
 RUN apt-get update && apt-get install -y mariadb-server gosu && \
     # 不要なAPTキャッシュを削除してイメージのサイズを小さくする
-    rm -rf /var/lib/apt/lists/*
-
-# 特定のIDでmysqlユーザーとグループを作成
-RUN getent group mysql || groupadd -r mysql --gid=999
-
-# mysqlユーザーが存在するか確認し、存在しない場合は作成
-RUN id -u mysql &>/dev/null || useradd -r -g mysql --uid=999 mysql
-
-# 正しい権限を設定
-RUN mkdir -p /var/lib/mysql /var/run/mysqld && \
+    rm -rf /var/lib/apt/lists/* && \
+    # 正しい権限を設定
+    # /var/lib/mysqlはデータファイルを格納する
+    # /var/run/mysqldソケットファイルを格納する
+    mkdir -p /var/lib/mysql /var/run/mysqld && \
     chown -R mysql:mysql /var/lib/mysql /var/run/mysqld && \
-    chmod 777 /var/run/mysqld
+    chmod 755 /var/run/mysqld
 
 # ホストマシン上の ./tools ディレクトリをコンテナ内の /docker-entrypoint-initdb.d にコピー
 # このディレクトリにあるスクリプト（.sqlファイルや.shファイルなど）は
