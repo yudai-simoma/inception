@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# - エラーが発生したらすぐに停止 (set -e)
+# - 宣言されていない変数の使用を禁止 (set -u)
+# - パイプラインでエラーが発生した場合も全体を失敗とする (set -o pipefail)
 set -eo pipefail
 
 # ボリュームマウントを考慮して、必要な場合のみ権限を再設定
@@ -15,8 +19,8 @@ fi
 
 # データディレクトリが空の場合、MariaDBを初期化する
 if [ ! -d "/var/lib/mysql/mysql" ]; then
-    # データベースシステムファイルの作成
-    mysqld --initialize-insecure --user=mysql --datadir=/var/lib/mysql
+    # データベースシステムファイルの初期化
+    mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
     # 初期設定を適用するためのサーバー環境を提供
     mysqld --user=mysql --skip-networking &

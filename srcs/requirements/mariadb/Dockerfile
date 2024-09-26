@@ -25,6 +25,3 @@ EXPOSE 3306
 
 # コンテナ起動時にdocker-entrypoint.shスクリプトを実行
 ENTRYPOINT ["docker-entrypoint.sh"]
-
-# MariaDBのサーバープロセス（mysqld）をコンテナ起動時に実行
-CMD ["mysqld"]

@@ -3,21 +3,22 @@ FROM debian:stable
 RUN apt-get update && apt-get install -y php8.2-fpm php8.2-mysql wget unzip && \
     wget https://wordpress.org/latest.zip && \
     unzip latest.zip && \
-    mkdir -p /var/www/html && \
-    cp -r wordpress/. /var/www/html/ && \
-    # WordPressファイルの所有者とグループを www-data に変更（Webサーバー用ユーザー）
-    chown -R www-data:www-data /var/www/html/ && \
+    mv wordpress /usr/src/wordpress && \
     # 不要になったWordPressディレクトリとtarファイルを削除し、APTのキャッシュをクリア
-    rm -rf wordpress latest.zip && rm -rf /var/lib/apt/lists/*
+    rm -rf latest.zip && rm -rf /var/lib/apt/lists/*
 
 # wp-config.php をコピー
-COPY wp-config.php /var/www/html/
+COPY wp-config.php /usr/src/wordpress/wp-config.php
 
-# wp-config.php の所有者とグループを www-data に変更
-RUN chown www-data:www-data /var/www/html/wp-config.php
+# エントリーポイントスクリプトをコピー
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# php-fpmのログファイルを作成し、所有者とグループを変更
+RUN touch /var/log/php8.2-fpm.log && chown www-data:www-data /var/log/php8.2-fpm.log
 
 # php-fpmがリクエストを受け付けるために、9000番ポートを開放
 EXPOSE 9000
 
-# php-fpmを起動してFastCGIリクエストを処理
-CMD ["php-fpm8.2"]
+# コンテナ起動時にdocker-entrypoint.shスクリプトを実行
+ENTRYPOINT ["docker-entrypoint.sh"]
