@@ -25,7 +25,6 @@ if [ "$(stat -c %U:%G /var/lib/mysql)" != "mysql:mysql" ]; then
 fi
 
 # 取得した所有者とグループが "mysql:mysql" と一致するかどうか
-if [ "$(stat -c %U:%G /run/mysqld)" != "mysql:mysql" ]; then
 echo "/run/mysqld の権限をチェックおよび設定します"
 if [ ! -d "/run/mysqld" ] || [ "$(stat -c %U:%G /run/mysqld)" != "mysql:mysql" ]; then
     echo "/run/mysqld を作成し、権限を設定します"
@@ -42,7 +41,6 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
     echo "データベースの初期化が完了しました"
 
     # 初期設定を適用するためのサーバー環境を提供
-    mysqld --user=mysql --skip-networking &
     echo "一時的なMariaDBサーバーを起動します"
     mysqld_safe --skip-networking --datadir=/var/lib/mysql &
     pid="$!"
@@ -50,9 +48,7 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
     # MySQLクライアントを実行するためのコマンドライン引数
     mysql=( mysql --protocol=socket -uroot )
 
-    # サーバーが完全に起動し、接続可能になるまで待機
-    for i in {30..0}; do
-        # サーバーが接続を受け付けられる状態になっているかをチェック
+    # サーバーが接続を受け付けられる状態になっているかをチェック
     echo "MariaDBが利用可能になるのを待機しています"
     for i in {1..300}; do
         if echo 'SELECT 1' | "${mysql[@]}" &> /dev/null; then
