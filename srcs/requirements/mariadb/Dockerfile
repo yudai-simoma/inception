@@ -1,7 +1,7 @@
 FROM debian:stable
 
 # gosuは、特定のユーザーやグループとしてコマンドを実行する
-RUN apt-get update && apt-get install -y mariadb-server gosu && \
+RUN apt-get update && apt-get install -y mariadb-server gosu net-tools && \
     # 不要なAPTキャッシュを削除してイメージのサイズを小さくする
     rm -rf /var/lib/apt/lists/* && \
     # 正しい権限を設定
@@ -12,8 +12,7 @@ RUN apt-get update && apt-get install -y mariadb-server gosu && \
     chmod 755 /var/run/mysqld
 
 # ホストマシン上の ./tools ディレクトリをコンテナ内の /docker-entrypoint-initdb.d にコピー
-# このディレクトリにあるスクリプト（.sqlファイルや.shファイルなど）は
-# コンテナ初回起動時に自動で実行され、データベースの初期化を行う
+# このディレクトリにあるスクリプト（.sqlファイルや.shファイルなど）はエントリポイントで実行する
 COPY ./tools /docker-entrypoint-initdb.d
 
 # エントリーポイントスクリプトをコピー

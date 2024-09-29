@@ -1,7 +1,7 @@
-# version: '3.8'
-
 services:
   nginx:
+    container_name: nginx
+    image: nginx:1.24.0
     # nginxのDockerfileがあるディレクトリを指定してビルド
     build: ./requirements/nginx
     ports:
@@ -15,9 +15,17 @@ services:
       - VIRTUAL_HOST=${DOMAIN_NAME}
     # クラッシュ時に再起動
     restart: always
+    depends_on:
+      - wordpress
+    extra_hosts:
+      - "yshimoma.42.fr:127.0.0.1"
 
   wordpress:
+    container_name: wordpress
+    image: wordpress:6.4.3
     build: ./requirements/wordpress
+    ports:
+      - "9000:9000"
     volumes:
       - wordpress_data:/var/www/html
     environment:
@@ -25,6 +33,11 @@ services:
       - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}
       - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
       - WORDPRESS_DB_PASSWORD=${WORDPRESS_DB_PASSWORD}
+      - WORDPRESS_URL=https://yshimoma.42.fr
+      - WORDPRESS_TITLE=yshimomaInceptionSite
+      - WORDPRESS_ADMIN_USER=yshimoma
+      - WORDPRESS_ADMIN_PASSWORD=yshimoma_password
+      - WORDPRESS_ADMIN_EMAIL=admin@example.com
     networks:
       - wordpress_network
     depends_on:
@@ -34,7 +47,11 @@ services:
     user: "www-data"
 
   mariadb:
+    container_name: mariadb
+    image: mariadb:11.2.2
     build: ./requirements/mariadb
+    ports:
+      - "3306:3306"
     volumes:
       - mariadb_data:/var/lib/mysql
     environment:
@@ -45,7 +62,7 @@ services:
     networks:
       - wordpress_network
     restart: always
-    user: "mysql"
+    user: root
 
 volumes:
   wordpress_data:
@@ -64,8 +81,10 @@ volumes:
       o: bind
       device: /home/${USER}/data/mariadb
       # sudo chown -R 999:999 /home/${USER}/data/mariadbが必要
+
 networks:
   wordpress_network:
+    name: wordpress_network
 
 
 # services: 各サービス（コンテナ）の設定。

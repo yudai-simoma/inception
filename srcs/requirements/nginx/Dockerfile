@@ -1,7 +1,7 @@
 FROM debian:stable
 
 # openssl は HTTPS 通信に必要な SSL/TLS 証明書の生成と管理に使用します
-RUN apt-get update && apt-get install -y nginx openssl && \
+RUN apt-get update && apt-get install -y nginx openssl vim && \
     # インストール後、キャッシュを削除してイメージサイズを削減
     rm -rf /var/lib/apt/lists/*
 
