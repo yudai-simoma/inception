@@ -17,21 +17,13 @@ CONFIG_FILE="/etc/mysql/mariadb.conf.d/50-server.cnf"
 echo "bind-addressを0.0.0.0に変更します"
 sed -i "s/^bind-address\s*=.*$/bind-address = 0.0.0.0/" "$CONFIG_FILE"
 
-# ボリュームマウントを考慮して、必要な場合のみ権限を再設定
-echo "/var/lib/mysql の権限をチェックおよび設定します"
-if [ "$(stat -c %U:%G /var/lib/mysql)" != "mysql:mysql" ]; then
-    echo "/var/lib/mysql の所有権を mysql:mysql に変更します"
-    chown -R mysql:mysql /var/lib/mysql
-fi
-
-# 取得した所有者とグループが "mysql:mysql" と一致するかどうか
-echo "/run/mysqld の権限をチェックおよび設定します"
-if [ ! -d "/run/mysqld" ] || [ "$(stat -c %U:%G /run/mysqld)" != "mysql:mysql" ]; then
-    echo "/run/mysqld を作成し、権限を設定します"
-    mkdir -p /run/mysqld
-    chown -R mysql:mysql /run/mysqld
-    chmod 755 /run/mysqld
-fi
+# ディレクトリの権限を設定
+# /var/lib/mysqlはデータファイルを格納する
+# /run/mysqldソケットファイルを格納する
+echo "/var/lib/mysql と /run/mysqld の権限をチェックおよび設定します"
+mkdir -p /var/lib/mysql /run/mysqld /var/run/mysqld
+chown -R mysql:mysql /var/lib/mysql /run/mysqld /var/run/mysqld
+chmod 755 /run/mysqld /var/run/mysqld
 
 # データディレクトリが空の場合、MariaDBを初期化する
 if [ ! -d "/var/lib/mysql/mysql" ]; then

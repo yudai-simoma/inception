@@ -20,15 +20,17 @@ setup:
 	fi
 
 # Docker コンテナを起動
+# --no-cache: ビルド時にキャッシュを使用せず、新しくイメージをビルドするオプション
+# -d: コンテナがバックグラウンドで実行され、シェルがブロックされないオプション
 up: setup
-	docker compose -f srcs/docker-compose.yml build --no-cache
+	$(DOCKER_COMPOSE) build --no-cache
 	$(DOCKER_COMPOSE) up -d
 
 # Docker コンテナを停止
 down:
 	$(DOCKER_COMPOSE) down
 
-# Docker コンテナ、イメージ、ボリュームを削除
+# Docker イメージ、ボリュームを削除
 clean: down
 	docker system prune -a --volumes
 	@if docker volume inspect srcs_mariadb_data > /dev/null 2>&1; then \

@@ -1,15 +1,11 @@
+# ベースイメージとしてDebianの安定版を使用
 FROM debian:stable
 
 # gosuは、特定のユーザーやグループとしてコマンドを実行する
-RUN apt-get update && apt-get install -y mariadb-server gosu net-tools && \
+RUN apt-get update && \
+    apt-get install -y mariadb-server gosu net-tools && \
     # 不要なAPTキャッシュを削除してイメージのサイズを小さくする
-    rm -rf /var/lib/apt/lists/* && \
-    # 正しい権限を設定
-    # /var/lib/mysqlはデータファイルを格納する
-    # /var/run/mysqldソケットファイルを格納する
-    mkdir -p /var/lib/mysql /var/run/mysqld && \
-    chown -R mysql:mysql /var/lib/mysql /var/run/mysqld && \
-    chmod 755 /var/run/mysqld
+    rm -rf /var/lib/apt/lists/*
 
 # ホストマシン上の ./tools ディレクトリをコンテナ内の /docker-entrypoint-initdb.d にコピー
 # このディレクトリにあるスクリプト（.sqlファイルや.shファイルなど）はエントリポイントで実行する
