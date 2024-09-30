@@ -50,6 +50,7 @@ done
 # WordPressがインストールされていない場合はインストール
 if ! wp core is-installed --path=/var/www/html --allow-root; then
     echo "WordPressをインストールしています..."
+    # WordPressのインストール処理
     wp core install --path=/var/www/html \
         --url="${WORDPRESS_URL}" \
         --title="${WORDPRESS_TITLE}" \
@@ -57,6 +58,17 @@ if ! wp core is-installed --path=/var/www/html --allow-root; then
         --admin_password="${WORDPRESS_ADMIN_PASSWORD}" \
         --admin_email="${WORDPRESS_ADMIN_EMAIL}" \
         --skip-email --allow-root
+    echo "WordPressのインストールが完了しました。"
+    
+    # 一般ユーザーの追加
+    echo "一般ユーザー 'wp_user1' を追加しています..."
+    wp user create wp_user1 user@example.com \
+        --role=subscriber \
+        --user_pass=user1_password \
+        --display_name="Normal User1" \
+        --path=/var/www/html \
+        --allow-root
+    echo "一般ユーザー 'wp_user1' の追加が完了しました。"
 else
     echo "WordPressは既にインストールされています。インストールをスキップします。"
 fi
