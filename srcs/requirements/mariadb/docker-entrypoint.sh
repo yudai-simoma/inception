@@ -63,26 +63,6 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
         exit 1
     fi
 
-    # 1.不要なユーザーの削除
-    # 2.rootパスワードの設定
-    # 3.新しいデータベースとユーザーの作成
-    # 4.権限の設定
-    echo "MariaDBを設定しています"
-    "${mysql[@]}" <<-EOSQL
-        SET @@SESSION.SQL_LOG_BIN=0;
-        DELETE FROM mysql.user WHERE user NOT IN ('mysql.sys', 'mysqlxsys', 'root') OR host NOT IN ('localhost');
-        SET PASSWORD FOR 'root'@'localhost'=PASSWORD('${MYSQL_ROOT_PASSWORD}');
-        GRANT ALL ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
-
-         # ここでwp_db_userを作成し、権限を付与する
-        CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
-        CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
-        GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';
-
-        FLUSH PRIVILEGES;
-EOSQL
-    echo "MariaDBの設定が完了しました"
-
     # /docker-entrypoint-initdb.dディレクトリ内のスクリプトを実行
     echo "初期化スクリプトを実行しています..."
     for f in /docker-entrypoint-initdb.d/*; do
