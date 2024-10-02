@@ -12,6 +12,13 @@ RUN apt-get update && \
 # これにより、カスタムの Nginx 設定をコンテナに追加できます
 COPY ./conf /etc/nginx/conf.d
 
+# SSL証明書と秘密鍵を生成するスクリプトを作成
+RUN mkdir -p /etc/nginx/conf.d/ssl && \
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+-keyout /etc/nginx/conf.d/ssl/nginx.key \
+-out /etc/nginx/conf.d/ssl/nginx.crt \
+-subj "/C=JP/ST=Tokyo/L=Tokyo/O=MyCompany/OU=IT/CN=localhost"
+
 # コンテナが 443 ポート（HTTPS）でリッスンすることを Docker に通知
 EXPOSE 443
 

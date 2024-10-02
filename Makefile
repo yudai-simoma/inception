@@ -7,14 +7,6 @@ setup:
 	@if [ ! -f srcs/.env ]; then \
 		cp /home/yshimoma/Desktop/inception/.env srcs/.env; \
 	fi
-	@if [ ! -f srcs/requirements/nginx/conf/ssl/nginx.crt ]; then \
-		mkdir -p srcs/requirements/nginx/conf/ssl; \
-		cp /home/yshimoma/Desktop/inception/nginx.crt srcs/requirements/nginx/conf/ssl/nginx.crt; \
-	fi
-	@if [ ! -f srcs/requirements/nginx/conf/ssl/nginx.key ]; then \
-		mkdir -p srcs/requirements/nginx/conf/ssl; \
-		cp /home/yshimoma/Desktop/inception/nginx.key srcs/requirements/nginx/conf/ssl/nginx.key; \
-	fi
 	@if [ ! -f srcs/requirements/wordpress/wp-config.php ]; then \
 		cp /home/yshimoma/Desktop/inception/wp-config.php srcs/requirements/wordpress/wp-config.php; \
 	fi
