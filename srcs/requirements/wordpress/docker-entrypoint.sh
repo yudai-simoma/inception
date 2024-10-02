@@ -64,7 +64,7 @@ if ! wp core is-installed --path=/var/www/html --allow-root; then
     echo "一般ユーザー 'wp_user1' を追加しています..."
     wp user create wp_user1 user@example.com \
         --role=subscriber \
-        --user_pass=user1_password \
+        --user_pass="${SUBSCRIBER_USER_PASSWORD}" \
         --display_name="Normal User1" \
         --path=/var/www/html \
         --allow-root

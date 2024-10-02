@@ -3,7 +3,7 @@ FROM debian:stable
 
 # gosuは、特定のユーザーやグループとしてコマンドを実行する
 RUN apt-get update && \
-    apt-get install -y mariadb-server gosu net-tools && \
+    apt-get install -y mariadb-server gosu net-tools gettext && \
     # 不要なAPTキャッシュを削除してイメージのサイズを小さくする
     rm -rf /var/lib/apt/lists/*
 

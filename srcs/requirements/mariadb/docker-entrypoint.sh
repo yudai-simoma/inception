@@ -5,11 +5,6 @@
 # - パイプラインでエラーが発生した場合も全体を失敗とする (set -o pipefail)
 set -eo pipefail
 
-echo "MariaDB エントリーポイントスクリプトを開始します"
-echo "Host: ${WORDPRESS_DB_HOST}"
-echo "User: ${WORDPRESS_DB_USER}"
-echo "Database: ${WORDPRESS_DB_NAME}"
-
 # MariaDB設定ファイルのパス
 CONFIG_FILE="/etc/mysql/mariadb.conf.d/50-server.cnf"
 
@@ -65,19 +60,15 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
 
     # /docker-entrypoint-initdb.dディレクトリ内のスクリプトを実行
     echo "初期化スクリプトを実行しています..."
-    for f in /docker-entrypoint-initdb.d/*; do
-        case "$f" in
-            *.sql)
-                echo "SQLスクリプトを実行中: $f"
-                if "${mysql[@]}" < "$f"; then
-                    echo "SQLスクリプト $f の実行に成功しました"
-                else
-                    echo "エラー: SQLスクリプト $f の実行に失敗しました"
-                fi
-                ;;
-        esac
-        echo
-    done
+    # SQLファイルに環境変数を置換して適用
+    envsubst < /docker-entrypoint-initdb.d/init-template.sql > /docker-entrypoint-initdb.d/init.sql
+    # 置換したSQLスクリプトを実行
+    echo "SQLスクリプトを実行中: /docker-entrypoint-initdb.d/init.sql"
+    if "${mysql[@]}" < /docker-entrypoint-initdb.d/init.sql; then
+        echo "SQLスクリプト /docker-entrypoint-initdb.d/init.sql の実行に成功しました"
+    else
+        echo "エラー: SQLスクリプト /docker-entrypoint-initdb.d/init.sql の実行に失敗しました"
+    fi
     echo "初期化スクリプトの実行が完了しました"
 
     echo "一時的なMariaDBサーバーを停止します"

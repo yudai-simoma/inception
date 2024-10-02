@@ -32,6 +32,7 @@ down:
 
 # Docker イメージ、ボリュームを削除
 clean: down
+	docker builder prune --all
 	docker system prune -a --volumes
 	@if docker volume inspect srcs_mariadb_data > /dev/null 2>&1; then \
 		docker volume rm srcs_mariadb_data; \
