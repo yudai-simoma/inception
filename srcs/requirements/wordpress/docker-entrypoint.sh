@@ -16,10 +16,33 @@ if [ ! -d "/var/www/html" ]; then
     chown www-data:www-data /var/www/html
 fi
 
-# wp-config.phpが存在しない場合、WordPressファイルをコピー
-if [ ! -f /var/www/html/wp-config.php ]; then
+# WordPressファイルが存在しない場合、WordPressファイルをコピー
+if [ ! "$(ls /var/www/html)" ]; then
     echo "WordPressファイルを/var/www/htmlにコピーしています..."
     cp -r /usr/src/wordpress/* /var/www/html/
+
+    echo "wp-config.phpを作成しています..."
+    cat > /var/www/html/wp-config.php <<EOL
+    <?php
+    define( 'DB_NAME', '${WORDPRESS_DB_NAME}' );
+    define( 'DB_USER', '${WORDPRESS_DB_USER}' );
+    define( 'DB_PASSWORD', '${WORDPRESS_DB_PASSWORD}' );
+    define( 'DB_HOST', '${WORDPRESS_DB_HOST}' );
+    define( 'DB_CHARSET', 'utf8' );
+    define( 'DB_COLLATE', '' );
+
+    \$table_prefix = 'wp_';
+
+    define( 'WP_DEBUG', false );
+
+    if ( ! defined( 'ABSPATH' ) ) {
+        define( 'ABSPATH', __DIR__ . '/' );
+    }
+
+    require_once ABSPATH . 'wp-settings.php';
+EOL
+    echo "wp-config.phpの作成が完了しました。"
+
     echo "パーミッションを設定しています..."
     chown -R www-data:www-data /var/www/html
 else

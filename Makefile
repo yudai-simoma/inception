@@ -7,9 +7,6 @@ setup:
 	@if [ ! -f srcs/.env ]; then \
 		cp /home/yshimoma/Desktop/inception/.env srcs/.env; \
 	fi
-	@if [ ! -f srcs/requirements/wordpress/wp-config.php ]; then \
-		cp /home/yshimoma/Desktop/inception/wp-config.php srcs/requirements/wordpress/wp-config.php; \
-	fi
 
 # Docker コンテナを起動
 # --no-cache: ビルド時にキャッシュを使用せず、新しくイメージをビルドするオプション

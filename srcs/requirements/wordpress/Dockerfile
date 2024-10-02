@@ -20,9 +20,6 @@ RUN apt-get update && \
 # php-fpmのソケットをTCPポート9000に変更（WordPressと通信するため）
 RUN sed -i 's#listen = /run/php/php8.2-fpm.sock#listen = 9000#' /etc/php/8.2/fpm/pool.d/www.conf
 
-# WordPressの設定ファイルをコンテナにコピー
-COPY wp-config.php /usr/src/wordpress/wp-config.php
-
 # エントリーポイントスクリプトをコンテナにコピーし、実行権限を付与
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
