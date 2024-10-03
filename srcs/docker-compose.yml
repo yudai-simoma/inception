@@ -1,3 +1,4 @@
+name: yshimoma-inception-project
 services:
   nginx:
     container_name: nginx
