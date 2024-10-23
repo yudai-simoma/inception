@@ -5,7 +5,8 @@ FROM debian:stable
 RUN apt-get update && \
     apt-get install -y mariadb-server gosu net-tools gettext && \
     # 不要なAPTキャッシュを削除してイメージのサイズを小さくする
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* \
+    rm -rf /var/lib/mysql/*
 
 # ホストマシン上の ./tools ディレクトリをコンテナ内の /docker-entrypoint-initdb.d にコピー
 # このディレクトリにあるスクリプト（.sqlファイルや.shファイルなど）はエントリポイントで実行する

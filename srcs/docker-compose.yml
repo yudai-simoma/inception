@@ -42,7 +42,7 @@ services:
     depends_on:
       - mariadb
     restart: always
-    user: "www-data"
+    user: root
 
   mariadb:
     container_name: mariadb
@@ -71,17 +71,13 @@ volumes:
       # バインドマウントを使用
       o: bind
       # ホスト上のマウントポイント
-      device: ~/プログラミング/42Tokyo/project/first_circle/Rank05/inception/docker_data_volume/wordpress
-      # vm環境用
-      # device: /home/${USER}/data/wordpress
+      device: /home/${USER}/data/wordpress
   mariadb_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ~/プログラミング/42Tokyo/project/first_circle/Rank05/inception/docker_data_volume/mariadb
-      # vm環境用
-      # device: /home/${USER}/data/mariadb
+      device: /home/${USER}/data/mariadb
 
 networks:
   wordpress_network:

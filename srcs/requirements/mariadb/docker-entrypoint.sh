@@ -81,6 +81,8 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
     wait "$pid"
 else
     echo "MariaDBデータベースは既に初期化されています。初期化をスキップします"
+    echo "データベースの確認"
+    ls -l /var/lib/mysql/mysql
 fi
 
 echo "MariaDBサーバーを起動します"

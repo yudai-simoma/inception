@@ -23,14 +23,11 @@ down:
 clean: down
 	docker builder prune --all
 	docker system prune -a --volumes
-	@if docker volume inspect srcs_mariadb_data > /dev/null 2>&1; then \
-		docker volume rm srcs_mariadb_data; \
+	@if docker volume inspect yshimoma-inception-project_mariadb_data > /dev/null 2>&1; then \
+		docker volume rm yshimoma-inception-project_mariadb_data; \
 	fi
-	@if docker volume inspect srcs_wordpress_data > /dev/null 2>&1; then \
-		docker volume rm srcs_wordpress_data; \
-	fi
-	@if docker volume inspect srcs_wordpress_files > /dev/null 2>&1; then \
-		docker volume rm srcs_wordpress_files; \
+	@if docker volume inspect yshimoma-inception-project_wordpress_data > /dev/null 2>&1; then \
+		docker volume rm yshimoma-inception-project_wordpress_data; \
 	fi
 
 # 全てをリビルド
