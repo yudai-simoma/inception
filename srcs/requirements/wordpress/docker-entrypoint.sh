@@ -17,7 +17,7 @@ if [ ! -d "/var/www/html" ]; then
 fi
 
 # WordPressファイルが存在しない場合、WordPressファイルをコピー
-if [ ! "$(ls /var/www/html)" ]; then
+if [ ! -f /var/www/html/wp-config-sample.php ]; then
     echo "WordPressファイルを/var/www/htmlにコピーしています..."
     cp -r /usr/src/wordpress/* /var/www/html/
 
