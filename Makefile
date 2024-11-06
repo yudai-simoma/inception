@@ -9,8 +9,8 @@ setup:
 	fi
 	@mkdir -p ~/プログラミング/42Tokyo/project/first_circle/Rank05/inception/docker_data_volume/wordpress
 	@mkdir -p ~/プログラミング/42Tokyo/project/first_circle/Rank05/inception/docker_data_volume/mariadb
-#	@mkdir -p /home/$${USER}/data/wordpress
-#	@mkdir -p /home/$${USER}/data/mariadb
+#	@mkdir -p /home/${USER}/data/wordpress
+#	@mkdir -p /home/${USER}/data/mariadb
 
 # Docker コンテナを起動
 # --no-cache: ビルド時にキャッシュを使用せず、新しくイメージをビルドするオプション

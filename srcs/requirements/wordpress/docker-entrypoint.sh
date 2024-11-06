@@ -98,7 +98,7 @@ fi
 
 # 画像ファイルをアップロードできるようにする
 echo "wp-content/uploads/ディレクトリの所有者を変更します。"
-chown www-data:www-data /var/www/html/wp-content/uploads/
+chown -R www-data:www-data /var/www/html/wp-content/uploads/
 
 # MariaDBが準備できたら、PHP-FPMを起動
 echo "MariaDBの準備が整いました。PHP-FPMを起動しています..."
