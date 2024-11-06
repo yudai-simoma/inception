@@ -7,6 +7,8 @@ setup:
 	@if [ ! -f srcs/.env ]; then \
 		cp /home/yshimoma/Desktop/inception/.env srcs/.env; \
 	fi
+	@mkdir -p /home/${USER}/data/wordpress
+	@mkdir -p /home/${USER}/data/mariadb
 
 # Docker コンテナを起動
 # --no-cache: ビルド時にキャッシュを使用せず、新しくイメージをビルドするオプション
