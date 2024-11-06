@@ -42,7 +42,7 @@ services:
     depends_on:
       - mariadb
     restart: always
-    user: "www-data"
+    user: root
 
   mariadb:
     container_name: mariadb

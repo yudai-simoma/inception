@@ -7,6 +7,10 @@ setup:
 	@if [ ! -f srcs/.env ]; then \
 		cp /home/yshimoma/Desktop/inception/.env srcs/.env; \
 	fi
+	@mkdir -p ~/プログラミング/42Tokyo/project/first_circle/Rank05/inception/docker_data_volume/wordpress
+	@mkdir -p ~/プログラミング/42Tokyo/project/first_circle/Rank05/inception/docker_data_volume/mariadb
+#	@mkdir -p /home/$${USER}/data/wordpress
+#	@mkdir -p /home/$${USER}/data/mariadb
 
 # Docker コンテナを起動
 # --no-cache: ビルド時にキャッシュを使用せず、新しくイメージをビルドするオプション
@@ -23,14 +27,11 @@ down:
 clean: down
 	docker builder prune --all
 	docker system prune -a --volumes
-	@if docker volume inspect srcs_mariadb_data > /dev/null 2>&1; then \
-		docker volume rm srcs_mariadb_data; \
+	@if docker volume inspect yshimoma-inception-project_mariadb_data > /dev/null 2>&1; then \
+		docker volume rm yshimoma-inception-project_mariadb_data; \
 	fi
-	@if docker volume inspect srcs_wordpress_data > /dev/null 2>&1; then \
-		docker volume rm srcs_wordpress_data; \
-	fi
-	@if docker volume inspect srcs_wordpress_files > /dev/null 2>&1; then \
-		docker volume rm srcs_wordpress_files; \
+	@if docker volume inspect yshimoma-inception-project_wordpress_data > /dev/null 2>&1; then \
+		docker volume rm yshimoma-inception-project_wordpress_data; \
 	fi
 
 # 全てをリビルド
