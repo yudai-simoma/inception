@@ -7,8 +7,8 @@ setup:
 	@if [ ! -f srcs/.env ]; then \
 		cp /home/yshimoma/Desktop/inception/.env srcs/.env; \
 	fi
-	@mkdir -p ~/プログラミング/42Tokyo/project/first_circle/Rank05/inception/docker_data_volume/wordpress
-	@mkdir -p ~/プログラミング/42Tokyo/project/first_circle/Rank05/inception/docker_data_volume/mariadb
+	@mkdir -p ~/programming/42Tokyo/project/first_circle/Rank05/inception/docker_data_volume/wordpress
+	@mkdir -p ~/programming/42Tokyo/project/first_circle/Rank05/inception/docker_data_volume/mariadb
 #	@mkdir -p /home/${USER}/data/wordpress
 #	@mkdir -p /home/${USER}/data/mariadb
 

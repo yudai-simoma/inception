@@ -71,7 +71,7 @@ volumes:
       # バインドマウントを使用
       o: bind
       # ホスト上のマウントポイント
-      device: ~/プログラミング/42Tokyo/project/first_circle/Rank05/inception/docker_data_volume/wordpress
+      device: ~/programming/42Tokyo/project/first_circle/Rank05/inception/docker_data_volume/wordpress
       # vm環境用
       # device: /home/${USER}/data/wordpress
   mariadb_data:
@@ -79,14 +79,13 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ~/プログラミング/42Tokyo/project/first_circle/Rank05/inception/docker_data_volume/mariadb
+      device: ~/programming/42Tokyo/project/first_circle/Rank05/inception/docker_data_volume/mariadb
       # vm環境用
       # device: /home/${USER}/data/mariadb
 
 networks:
   wordpress_network:
     name: wordpress_network
-
 
 # services: 各サービス（コンテナ）の設定。
 # image: 使用するDockerイメージを指定。
